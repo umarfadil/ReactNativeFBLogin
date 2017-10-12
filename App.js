@@ -11,6 +11,7 @@ import {
   Text,
   View
 } from 'react-native';
+import {LoginButton, AccessToken} from 'react-native-fbsdk';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -24,14 +25,23 @@ export default class App extends Component<{}> {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
-          Welcome to DevC Surabaya Masterclass!
+          React Native Facebook Login
         </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
+        <LoginButton
+          publishPermissions={["publish_actions"]}
+          onLoginFinished={(error, result) => {
+            if (error) {
+              alert("Login failed with error: " + error.toString());
+            } else if (result.isCancelled) {
+              alert("Login was cancelled");
+            } else {
+              alert("Login was a success", result.grantedPermissions.toString());
+            }
+          }}
+          onLogoutFinished={() => {
+            alert("User logged out");
+          }}
+        />
       </View>
     );
   }
